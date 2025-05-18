@@ -1,27 +1,26 @@
-import { useRuntimeConfig } from '#imports'
 import { Client, EmbedBuilder, TextChannel } from 'discord.js'
 import { defineEventHandler, readBody } from 'h3'
-
-const { CHANNEL_ID } = useRuntimeConfig()
 
 export default defineEventHandler(async event => {
   const { client } = globalThis.$discord as { client: Client }
 
   const body = await readBody(event)
-  const { sistema, mensagem, tipo, ip, status } = body
+  const { sistema, mensagem, tipo, ip, status, channelId } = body
 
-  const fetched = await client.channels.fetch(CHANNEL_ID)
-  if(!fetched?.isTextBased()) return { status: 'Canal inválido' }
+  if(!channelId) throw new Error('Channel ID not provided.')
+
+  const fetched = await client.channels.fetch(channelId)
+  if(!fetched?.isTextBased()) return { status: 'Invalid channel.' }
 
   const channel = fetched as TextChannel
 
-  const cor = tipo === 'error' ? 0xFF0000 : tipo === 'success' ? 0x00CC66 : tipo === 'info' ? 0xFFCC00 : 0xCCCCCC
+  const color = tipo === 'error' ? 0xFF0000 : tipo === 'success' ? 0x00CC66 : tipo === 'info' ? 0xFFCC00 : 0xCCCCCC
 
-  const titulo = tipo === 'error' ? `❌ Erro ${status || ''}` : tipo === 'success' ? '✅ Sucesso' : tipo === 'info' ? '📢 Informação' : '⚠️ Log'
+  const title = tipo === 'error' ? `❌ Error ${status || ''}` : tipo === 'success' ? '✅ Success' : tipo === 'info' ? '📢 Info' : '⚠️ Log'
 
-  const embed = new EmbedBuilder().setTitle(titulo).setColor(cor).setDescription(ip ? `${ip} - ${mensagem}` : mensagem).setAuthor({ name: sistema }).setTimestamp()
+  const embed = new EmbedBuilder().setTitle(title).setColor(color).setDescription(ip ? `${ip} - ${mensagem}` : mensagem).setAuthor({ name: sistema }).setTimestamp()
 
   await channel.send({ embeds: [embed] })
 
-  return { status: 'Mensagem enviada com sucesso' }
+  return { status: 'Message sent successfully.' }
 })

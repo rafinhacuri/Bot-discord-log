@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import { defineNitroConfig } from 'nitropack/config'
 import process from 'node:process'
 
