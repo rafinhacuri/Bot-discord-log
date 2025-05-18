@@ -1,69 +1,27 @@
 import { useRuntimeConfig } from '#imports'
-import { Client, EmbedBuilder, GatewayIntentBits, TextChannel } from 'discord.js'
+import { Client, EmbedBuilder, TextChannel } from 'discord.js'
 import { defineEventHandler, readBody } from 'h3'
 
-const { DISCORD_TOKEN, CHANNEL_ID } = useRuntimeConfig()
-
-const client = new Client({
-  intents: [
-    GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.Guilds,
-  ],
-})
-
-let ready = false
-let channel: null | TextChannel = null
-
-client.once('ready', async () => {
-  console.warn(`✅ Bot conectado como ${client.user?.tag}`)
-
-  try {
-    const fetched = await client.channels.fetch(CHANNEL_ID || '')
-    if(!fetched?.isTextBased()){
-      console.error('❌ Canal não encontrado ou não é de texto')
-      return
-    }
-    channel = fetched as TextChannel
-    ready = true
-  }
-  catch (error){
-    console.error('❌ Erro ao buscar canal:', error)
-  }
-})
-
-client.login(DISCORD_TOKEN)
+const { CHANNEL_ID } = useRuntimeConfig()
 
 export default defineEventHandler(async event => {
-  if(!ready || !channel){
-    return { status: 'Bot não pronto ou canal inválido.' }
-  }
+  const { client } = globalThis.$discord as { client: Client }
 
-  if(event.method !== 'POST'){
-    event.node.res.statusCode = 405
-    return 'Method Not Allowed'
-  }
+  const body = await readBody(event)
+  const { sistema, mensagem, tipo, ip, status } = body
 
-  try {
-    const body = await readBody(event)
-    const { sistema, mensagem, tipo, ip, status } = body
+  const fetched = await client.channels.fetch(CHANNEL_ID)
+  if(!fetched?.isTextBased()) return { status: 'Canal inválido' }
 
-    const cor = tipo === 'error' ? 0xFF0000 : tipo === 'success' ? 0x00CC66 : tipo === 'info' ? 0xFFCC00 : 0xCCCCCC
+  const channel = fetched as TextChannel
 
-    const titulo = tipo === 'error' ? `❌ Erro ${status || ''}` : tipo === 'success' ? '✅ Sucesso' : tipo === 'info' ? '📢 Informação' : '⚠️ Log'
+  const cor = tipo === 'error' ? 0xFF0000 : tipo === 'success' ? 0x00CC66 : tipo === 'info' ? 0xFFCC00 : 0xCCCCCC
 
-    const embed = new EmbedBuilder()
-      .setTitle(titulo)
-      .setColor(cor)
-      .setDescription(ip ? `${ip} - ${mensagem}` : mensagem)
-      .setAuthor({ name: sistema })
+  const titulo = tipo === 'error' ? `❌ Erro ${status || ''}` : tipo === 'success' ? '✅ Sucesso' : tipo === 'info' ? '📢 Informação' : '⚠️ Log'
 
-    await channel.send({ embeds: [embed] })
+  const embed = new EmbedBuilder().setTitle(titulo).setColor(cor).setDescription(ip ? `${ip} - ${mensagem}` : mensagem).setAuthor({ name: sistema }).setTimestamp()
 
-    return { status: 'Mensagem enviada com sucesso' }
-  }
-  catch (error){
-    console.error('❌ Erro ao enviar mensagem:', error)
-    event.node.res.statusCode = 500
-    return 'Erro ao processar'
-  }
+  await channel.send({ embeds: [embed] })
+
+  return { status: 'Mensagem enviada com sucesso' }
 })
