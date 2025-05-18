@@ -10,6 +10,13 @@
     "url": "https://curi.dev.br"
   },
   "license": "MIT",
+  "funding": "https://github.com/rafinhacuri/",
+  "homepage": "https://github.com/rafinhacuri/Bot-discord-log",
+  "repository": {
+    "type": "github",
+    "url": "https://github.com/rafinhacuri/Bot-discord-log.git"
+  },
+  "bugs": "https://github.com/rafinhacuri/Bot-discord-log/issues",
   "keywords": [
     "discord",
     "bot",
