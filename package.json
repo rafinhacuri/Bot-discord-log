@@ -1,8 +1,8 @@
 {
-  "name": "@cbpf/bot-logs-discord",
+  "name": "bot-logs-discord",
   "type": "module",
-  "version": "1.2.0",
-  "packageManager": "pnpm@10.9.0",
+  "version": "1.0.1",
+  "packageManager": "pnpm@10.12.1",
   "description": "Bot logs pro Discord",
   "author": {
     "name": "Rafael Curi",
@@ -11,12 +11,12 @@
   },
   "license": "MIT",
   "funding": "https://github.com/rafinhacuri/",
-  "homepage": "https://github.com/rafinhacuri/Bot-discord-log",
+  "homepage": "https://git.cbpf.br/rafaelcuri/bot-log-discord",
   "repository": {
-    "type": "github",
-    "url": "https://github.com/rafinhacuri/Bot-discord-log.git"
+    "type": "git",
+    "url": "git+https://git.cbpf.br/rafaelcuri/bot-log-discord.git"
   },
-  "bugs": "https://github.com/rafinhacuri/Bot-discord-log/issues",
+  "bugs": "https://git.cbpf.br/rafaelcuri/bot-log-discord/-/issues",
   "keywords": [
     "discord",
     "bot",
@@ -24,20 +24,21 @@
     "cbpf"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "nitro build",
     "dev": "nitro dev",
     "prepare": "nitro prepare",
     "preview": "node .output/server/index.mjs",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "release": "eslint . && bumpp && docker build --platform linux/amd64 --provenance=false -t dockerhub.cbpf.br/rafaelcuri/bot-log-discord . && docker push dockerhub.cbpf.br/rafaelcuri/bot-log-discord"
   },
   "dependencies": {
-    "discord.js": "^14.19.3",
-    "nitropack": "latest"
+    "discord.js": "^14.20.0",
+    "nitropack": "^2.11.12"
   },
   "devDependencies": {
-    "@dethdkn/eslint-config": "^2.3.2",
-    "eslint": "^9.27.0"
+    "@dethdkn/eslint-config": "^3.0.3",
+    "bumpp": "^10.1.1",
+    "eslint": "^9.29.0"
   }
 }

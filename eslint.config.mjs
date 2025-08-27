@@ -1,3 +1,3 @@
 import dethdkn from '@dethdkn/eslint-config'
 
-export default dethdkn()
+export default dethdkn({ autoImports: true })

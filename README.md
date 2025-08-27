@@ -16,26 +16,15 @@ Perfect for logging messages from your systems directly into Discord — **witho
 
 👉 **Success log example:**
 
-![Success log](public/success-log.png)  
+![Success log](images/success-log.png)  
 
 👉 **Error log example:**
 
-![Error log](public/error-log.png)  
+![Error log](images/error-log.png)  
 
 👉 **Info log example:**
 
-![Info log](public/info-log.png)  
-
----
-
-## ⚙️ Required environment variables
-
-Create a `.env` file in the root of your project with:
-
-```env
-DISCORD_TOKEN=YOUR_DISCORD_BOT_TOKEN
-CHANNEL_ID=YOUR_TARGET_CHANNEL_ID
-```
+![Info log](images/info-log.png)  
 
 ---
 
@@ -50,7 +39,7 @@ CHANNEL_ID=YOUR_TARGET_CHANNEL_ID
 
 📸 Example:
 
-![How to get Discord Token](public/discord-token.png)
+![How to get Discord Token](images/discord-token.png)
 
 ---
 
@@ -60,11 +49,10 @@ CHANNEL_ID=YOUR_TARGET_CHANNEL_ID
 2. Enable **Developer Mode**
 3. Right-click on the target channel
 4. Click **"Copy ID"**
-5. Paste it into `.env` as `CHANNEL_ID`
 
 📸 Example:
 
-![How to get Channel ID](public/channel-id.png)  
+![How to get Channel ID](images/channel-id.png)  
 
 ---
 
@@ -104,7 +92,8 @@ Send a `POST` request to the bot’s URL (e.g. `http://localhost:3001`) with a J
   "mensagem": "User Rafael logged in",
   "tipo": "success",
   "ip": "192.168.0.1",
-  "status": 200
+  "status": 200,
+  "channelId": "2133213123211223"
 }
 ```
 
@@ -123,7 +112,8 @@ await fetch('http://localhost:3001', {
     sistema: 'Reservation System',
     mensagem: 'User Rafael logged in',
     tipo: 'success',
-    ip: '127.0.0.1'
+    ip: '127.0.0.1',
+    channelId: '2133213123211223'
   })
 })
 ```

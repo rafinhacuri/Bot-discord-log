@@ -1,0 +1,10 @@
+stages:
+  - test
+
+lint:
+  stage: test
+  script:
+    - pnpm install
+    - pnpm lint
+  only:
+    - branches

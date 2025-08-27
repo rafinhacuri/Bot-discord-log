@@ -1,0 +1,13 @@
+.git
+docker-compose.yml
+Dockerfile
+.gitignore
+.DS_Store
+node_modules
+.idea
+dist
+.data
+.nitro
+.cache
+.output
+.env
